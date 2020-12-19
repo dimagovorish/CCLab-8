@@ -1,0 +1,9 @@
+npm install --arch=x64 --platform=linux --target=12.13.0  sharp
+
+aws lambda create-function --function-name CreateThumbnail --zip-file fileb://function.zip --handler index.handler --runtime nodejs12.x --timeout 10 --memory-size 1024 --role arn:aws:iam::871533708305:role/lambda-s3-role
+
+aws lambda invoke --function-name CreateThumbnail --invocation-type Event --payload file://inputFile.txt outputfile.txt --cli-binary-format raw-in-base64-out
+
+aws lambda add-permission --function-name CreateThumbnail --principal s3.amazonaws.com --statement-id s3invoke --action "lambda:InvokeFunction" --source-arn arn:aws:s3:::dmytrolab8 --source-account 871533708305
+
+aws lambda get-policy --function-name CreateThumbnail
